@@ -19,7 +19,7 @@ pipeline {
             continueOnError: false,
             publishers: [
               sshPublisherDesc(
-                costepsnfigName: 'staging',
+                configName: 'staging',
                 sshCredentials: [
                   username: "$USERNAME",
                   encryptedPassphrase: "$PASSWORD"
@@ -51,7 +51,7 @@ pipeline {
             continueOnError: false,
             publishers: [
               sshPublisherDesc(
-                costepsnfigName: 'production',
+                configName: 'production',
                 sshCredentials: [
                   username: "$USERNAME",
                   encryptedPassphrase: "$PASSWORD"

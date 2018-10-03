@@ -19,7 +19,7 @@ pipeline {
             continueOnError: false,
             publishers: [
               sshPublisherDesc(
-                configName: 'staging',
+                costepsnfigName: 'staging',
                 sshCredentials: [
                   username: "$USERNAME",
                   encryptedPassphrase: "$PASSWORD"
@@ -35,8 +35,41 @@ pipeline {
               )
             ]
           )
-        } 
+        }
       }
     }
+    stage ('DeployToProduction') {
+      when {
+        branch 'master'
+      }
+      steps {
+        input 'Promote to PRODUCTION?'
+        milestone(1)
+        withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sshPublisher(
+            failOnError: true,
+            continueOnError: false,
+            publishers: [
+              sshPublisherDesc(
+                costepsnfigName: 'production',
+                sshCredentials: [
+                  username: "$USERNAME",
+                  encryptedPassphrase: "$PASSWORD"
+                ],
+                transfers: [
+                  sshTransfer(
+                    sourceFiles: 'dist/trainSchedule.zip',
+                    removePrefix: 'dist/',
+                    remoteDirectory: '/tmp',
+                    execCommand: 'sudo /usr/bin/systemctl stop train-schedule && rm -rf /opt/train-schedule/* && unzip /tmp/trainSchedule.zip -d /opt/train-schedule && sudo /usr/bin/systemctl start train-schedule'
+                  )
+                ]
+              )
+            ]
+          )
+        }
+      }
+    }
+    
   }
 }

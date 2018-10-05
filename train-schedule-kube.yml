@@ -37,7 +37,7 @@ spec:
         env:
         - name: PORT
           value: 8080
-        - livenessProbe:
+        livenessProbe:
           httpGet:
             path: /
             port: 8080

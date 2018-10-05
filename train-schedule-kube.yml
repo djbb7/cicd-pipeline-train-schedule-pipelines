@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: train-schedule
-        image: linuxacademycontent/train-schedule:selfhealing
+        image: linuxacademycontent/train-schedule:autoscaling
         ports:
         - containerPort: 8080
         env:

@@ -31,10 +31,16 @@ spec:
     spec:
       containers:
       - name: train-schedule
-        image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
+        image: linuxacademycontent/train-schedule:selfhealing
         ports:
         - containerPort: 8080
         env:
         - name: PORT
           value: 8080
-          
+        - livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+          periodSeconds: 10
